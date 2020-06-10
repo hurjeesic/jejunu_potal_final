@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<web-app version="4.0" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+     http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/root-context.xml</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <servlet>
+        <servlet-name>dispatcherServlet</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>/WEB-INF/dispatcher-servlet.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+        <!-- https://blog.advenoh.pe.kr/spring/%EC%8A%A4%ED%94%84%EB%A7%81-%ED%8C%8C%EC%9D%BC-%EC%97%85%EB%A1%9C%EB%93%9C-%EC%B2%98%EB%A6%AC/ -->
+        <multipart-config>
+            <!-- 1MB * 20 = 20MB  -->
+            <max-file-size>20971520</max-file-size>
+            <!--  20MB  -->
+            <file-size-threshold>20971520</file-size-threshold>
+        </multipart-config>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dispatcherServlet</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    <filter>
+        <filter-name>myFilter</filter-name>
+        <filter-class>kr.ac.jejunu.MyFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>myFilter</filter-name>
+        <url-pattern>*</url-pattern>
+    </filter-mapping>
+    <listener>
+        <listener-class>kr.ac.jejunu.MyContextListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>kr.ac.jejunu.MyRequestListener</listener-class>
+    </listener>
+    <welcome-file-list>
+        <welcome-file>/WEB-INF/views/index.jsp</welcome-file>
+    </welcome-file-list>
+</web-app>
