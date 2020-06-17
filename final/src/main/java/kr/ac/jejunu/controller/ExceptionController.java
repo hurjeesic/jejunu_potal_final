@@ -1,4 +1,4 @@
-package kr.ac.jejunu;
+package kr.ac.jejunu.controller;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

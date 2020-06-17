@@ -1,4 +1,4 @@
-package kr.ac.jejunu;
+package kr.ac.jejunu.web.sequence;
 
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;

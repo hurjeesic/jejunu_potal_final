@@ -1,4 +1,4 @@
-package kr.ac.jejunu;
+package kr.ac.jejunu.web.sequence;
 
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;

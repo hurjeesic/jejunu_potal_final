@@ -1,8 +1,10 @@
-package kr.ac.jejunu;
+package kr.ac.jejunu.web.sequence;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 
+@WebFilter(urlPatterns = "*")
 public class MyFilter implements Filter {
 	@Override
 	public void init(FilterConfig filterConfig) {
