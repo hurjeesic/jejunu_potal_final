@@ -11,6 +11,6 @@
     <title>Title</title>
 </head>
 <body>
-    Hello World!
+    Hello ${user.nickname}!
 </body>
 </html>
