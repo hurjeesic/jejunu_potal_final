@@ -24,12 +24,47 @@
     <link rel="stylesheet" href="css/calendar/main.css">
     <link rel="stylesheet" href="css/calendar/spinner.css">
     <link rel="stylesheet" href="css/calendar/style.css">
+    <style>
+        .pull-left {
+            float: left;
+        }
+
+        .pull-right {
+            float: right;
+        }
+    </style>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/js/all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <c:if test="${todoNumberList != null}">
+        <script>
+			const datas = [];
+			// cls: 'bg-orange-alt', 'bg-green-alt', 'bg-red-alt', 'bg-cyan-alt', 'bg-purple-alt', 'bg-sky-blue-alt'
+			<c:forEach var="todoNumber" items="${todoNumberList}">
+			datas.push({
+				title: 'Total',
+				number: ${todoNumber.value.total},
+				time: `${todoNumber.key} 00:00:00`,
+				cls: 'bg-orange-alt'
+			});
+			datas.push({
+				title: 'Progress',
+				number: ${todoNumber.value.process},
+				time: `${todoNumber.key} 00:00:00`,
+				cls: 'bg-red-alt'
+			});
+			datas.push({
+				title: 'complete',
+				number: ${todoNumber.value.complete},
+				time: `${todoNumber.key} 00:00:00`,
+				cls: 'bg-green-alt'
+			});
+			</c:forEach>
+        </script>
+    </c:if>
     <script type="module" src="js/calendar/main.js"></script>
     <script src="js/calendar/etc.js"></script>
 </head>

@@ -23,6 +23,9 @@ public class Todo {
 	@ManyToOne(targetEntity = User.class)
 	private User user;
 
+	@Column(name = "time", nullable = false)
+	private Calendar time;
+
 	@Column(name = "created_time")
 	@CreatedDate
 	private Calendar createdTime;

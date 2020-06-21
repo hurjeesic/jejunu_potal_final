@@ -18,16 +18,6 @@ import java.util.Optional;
 public class UserController {
 	private final UserJpaRepository userJpaRepository;
 
-	// 테스트용
-	@GetMapping("/index")
-	public ModelAndView index() {
-		ModelAndView modelAndView = new ModelAndView("index");
-
-		modelAndView.addObject("user", userJpaRepository.findById(1).get());
-
-		return modelAndView;
-	}
-
 	@GetMapping("/login")
 	public ModelAndView showLogin() {
 		return new ModelAndView("login");

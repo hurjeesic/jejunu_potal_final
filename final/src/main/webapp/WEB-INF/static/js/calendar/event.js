@@ -28,15 +28,16 @@ export const Calendar = (id) => ({
 		console.log(el);
 	},
 	bindData(events) {
-		this.data = events.sort((a, b) => {
-			if (a.time < b.time) {
-				return -1;
-			}
-			if (a.time > b.time) {
-				return 1;
-			}
-			return 0;
-		});
+		this.data = events;
+		// .sort((a, b) => {
+		// 	if (a.time < b.time) {
+		// 		return -1;
+		// 	}
+		// 	if (a.time > b.time) {
+		// 		return 1;
+		// 	}
+		// 	return 0;
+		// });
 	},
 	renderEvents() {
 		if (!this.data || this.data.length <= 0) {
@@ -52,9 +53,9 @@ export const Calendar = (id) => ({
 			this.data.forEach((ev) => {
 				let evTime = moment(ev.time);
 				if (evTime.year() == y && evTime.month() == m && evTime.date() == d) {
-					let frgEvent = document.createRange().createContextualFragment(`
-                        <div time="${ev.time}" class="event ${ev.cls}">${evTime.format('h:mma')} ${ev.desc}</div>
-                    `);
+					// const node = `<div time="${ev.time}" class="event ${ev.cls}">${evTime.format('h:mma')} ${ev.desc}</div>`;
+					const node = `<div time="${ev.time}" class="event ${ev.cls}"><span class="pull-left">${ev.title}</span><span class="pull-right">${ev.number}개</span></div>`;
+					let frgEvent = document.createRange().createContextualFragment(node);
 					divEvents.appendChild(frgEvent);
 					let divEvent = divEvents.querySelector(`.event[time='${ev.time}']`);
 					divEvent.onclick = this.onEventClick;
