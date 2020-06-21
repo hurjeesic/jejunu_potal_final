@@ -17,15 +17,40 @@ export const Calendar = (id) => ({
 	onDateClick(e) {
 		StopEventPropagation(e);
 		const el = e.target ? e.target : e.srcElement;
-		alert('날짜 클릭!');
-		console.log(el);
+		let date;
+		if (el.nodeName.toLowerCase() == 'span' || el.getAttribute('time') != null) { // 일정 클릭
+			if (el.nodeName.toLowerCase() == 'span') {
+				date = el.parentNode.getAttribute('time').split(' ')[0];
+			}
+			else {
+				date = el.getAttribute('time').split(' ')[0];
+			}
+		}
+		else { // 날짜 클릭
+			const year = document.getElementsByClassName('year')[0].textContent;
+			let monthInt;
+			if (el.nodeName.toLowerCase() == 'div') {
+				monthInt = parseInt(el.getAttribute('month'));
+			}
+			else {
+				monthInt = parseInt(el.getElementsByTagName('div')[0].getAttribute('month'));
+			}
+			const month = `${(monthInt < 9 ? '0' : '')}${(monthInt + 1)}`;
+			const day = `${parseInt(el.textContent) < 10 ? '0' : ''}${el.textContent}`;
+			date = `${year}-${month}-${day}`;
+		}
 	},
 	// 일정 클릭
 	onEventClick(e) {
 		StopEventPropagation(e);
 		const el = e.target ? e.target : e.srcElement;
-		alert('일정 클릭!');
-		console.log(el);
+		let date;
+		if (el.nodeName.toLowerCase() == 'span') {
+			date = el.parentNode.getAttribute('time').split(' ')[0];
+		}
+		else {
+			date = el.getAttribute('time').split(' ')[0];
+		}
 	},
 	bindData(events) {
 		this.data = events;
