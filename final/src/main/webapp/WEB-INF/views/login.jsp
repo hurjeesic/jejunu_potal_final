@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: jimen
@@ -18,6 +19,9 @@
     <script src="js/login/main.js"></script>
 </head>
 <body>
+<c:if test='${error != null}'>
+    <script>alert('${error}')</script>
+</c:if>
 <div class="login-reg-panel">
     <div class="login-info-box">
         <h2>계정이 있으신가요?</h2>
@@ -34,12 +38,12 @@
     </div>
 
     <div class="white-panel">
-        <form action="/login" method="post">
+        <form name="login" action="/login" method="post">
             <div class="login-show">
                 <h2>로그인</h2>
-                <input type="text" name="id" placeholder="아이디">
+                <input type="text" name="id" placeholder="아이디" value="${id}">
                 <input type="password" name="password" placeholder="비밀번호">
-                <input type="submit" value="로그인">
+                <input type="button" id="loginBtn" value="로그인">
                 <a href="">비밀번호를 잊으셨나요?</a>
             </div>
         </form>

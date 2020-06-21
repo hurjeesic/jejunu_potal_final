@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.Optional;
+
 @Controller
 @RequiredArgsConstructor
 public class UserController {
@@ -16,8 +20,12 @@ public class UserController {
 
 	// 테스트용
 	@GetMapping("/index")
-	public User index() {
-		return userJpaRepository.findById(1).get();
+	public ModelAndView index() {
+		ModelAndView modelAndView = new ModelAndView("index");
+
+		modelAndView.addObject("user", userJpaRepository.findById(1).get());
+
+		return modelAndView;
 	}
 
 	@GetMapping("/login")
@@ -26,11 +34,18 @@ public class UserController {
 	}
 
 	@PostMapping("/login")
-	public ModelAndView login(@ModelAttribute User user) {
-		ModelAndView modelAndView = new ModelAndView("redirect:/index");
-		if (!userJpaRepository.findByIdAndPassword(user.getId(), user.getPassword()).isPresent()) {
+	public ModelAndView login(HttpServletRequest request, @ModelAttribute User user) {
+		HttpSession session = request.getSession();
+		ModelAndView modelAndView = new ModelAndView("redirect:index");
+		String id = user.getId();
+		Optional<User> loginUser = userJpaRepository.findByIdAndPassword(user.getId(), user.getPassword());
+		if (!loginUser.isPresent()) {
 			modelAndView.setViewName("login");
+			modelAndView.addObject("id", id);
 			modelAndView.addObject("error", "아이디 또는 비밀번호를 다시 확인해주세요.");
+		}
+		else {
+			session.setAttribute("user", loginUser.get());
 		}
 
 		return modelAndView;

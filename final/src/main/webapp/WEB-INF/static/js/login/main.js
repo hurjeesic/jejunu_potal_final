@@ -24,4 +24,23 @@ $(document).ready(function () {
 			$('.register-show').removeClass('show-log-panel');
 		}
 	});
+
+	document.getElementById('loginBtn').addEventListener('click', (e) => login());
+	document.querySelector('form[name=login] input[name=password]').addEventListener('keydown', (e) => {
+		if (e.keyCode == 13) {
+			login();
+		}
+	});
 });
+
+function login() {
+	if (!document.querySelector('form[name=login] input[name=id]').value) {
+		alert('아이디를 입력해주세요.');
+	}
+	else if (!document.querySelector('form[name=login] input[name=password]').value) {
+		alert('비밀번호를 입력해주세요.');
+	}
+	else {
+		document.login.submit();
+	}
+}
