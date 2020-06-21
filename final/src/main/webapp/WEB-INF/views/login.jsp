@@ -34,13 +34,15 @@
     </div>
 
     <div class="white-panel">
-        <div class="login-show">
-            <h2>로그인</h2>
-            <input type="text" placeholder="아이디">
-            <input type="password" placeholder="비밀번호">
-            <input type="button" value="로그인">
-            <a href="">비밀번호를 잊으셨나요?</a>
-        </div>
+        <form action="/login" method="post">
+            <div class="login-show">
+                <h2>로그인</h2>
+                <input type="text" name="id" placeholder="아이디">
+                <input type="password" name="password" placeholder="비밀번호">
+                <input type="submit" value="로그인">
+                <a href="">비밀번호를 잊으셨나요?</a>
+            </div>
+        </form>
         <div class="register-show">
             <h2>회원가입</h2>
             <input type="text" placeholder="아이디">
