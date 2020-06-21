@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: jimen
@@ -7,6 +8,9 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<c:if test='${sessionScope.get("user") == null}'>
+    <c:redirect url="login"/>
+</c:if>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -32,7 +36,7 @@
 <body>
 <div class="container" style="margin:30px auto">
     <header class="text-center text-white mb-2">
-        <h1 class="display-4">주인님의 todo list</h1>
+        <h1 class="display-4">${user.nickname}님의 todo list</h1>
         <%-- <p class="lead">본인의 todo 리스트를 만들어 보세요!</p> --%>
     </header>
 
