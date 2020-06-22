@@ -27,7 +27,7 @@ function init(data, today) {
 				data.push({
 					no: insertedTodo.no,
 					title: insertedTodo.title,
-					time: new Date(insertedTodo.time.time),
+					time: new Date(insertedTodo.time),
 					complete: insertedTodo.complete
 				});
 

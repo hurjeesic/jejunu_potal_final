@@ -69,9 +69,9 @@ export const Calendar = (id) => ({
 		// });
 	},
 	renderEvents() {
-		if (!this.data || this.data.length <= 0) {
-			return;
-		}
+		// if (!this.data || this.data.length <= 0) {
+		// 	return;
+		// }
 		const lis = this.el.querySelectorAll(`.calendar .days .inside`);
 		let y = this.el.querySelector('.month-year .year').innerText;
 		let m = lis[0].querySelector('.date').getAttribute('month');

@@ -1,3 +1,4 @@
+<%@ page import="java.util.Calendar" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
@@ -18,15 +19,15 @@
     <script>
 		const root = "<%= request.getContextPath() %>";
 		const today = '${today}';
-		<c:if test="${todoList != null}">
 		const todoList = [];
+		<c:if test="${todoList != null}">
 		<c:forEach var="todo" items="${todoList}">
 		todoList.push({
-            no: '${todo.no}',
-            title: '${todo.title}',
-            time: '${todo.time.time}',
-            complete: ${todo.complete}
-        });
+			no: ${todo.no},
+			title: '${todo.title}',
+			time: new Date(${todo.time.timeInMillis}),
+			complete: ${todo.complete}
+		});
 		</c:forEach>
 		</c:if>
     </script>
