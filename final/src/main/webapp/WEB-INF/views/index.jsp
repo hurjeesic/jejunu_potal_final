@@ -41,7 +41,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <c:if test="${todoNumberList != null}">
         <script>
-			const datas = [];
+	        const root = '<%= request.getContextPath() %>';
+	        const datas = [];
 			// cls: 'bg-orange-alt', 'bg-green-alt', 'bg-red-alt', 'bg-cyan-alt', 'bg-purple-alt', 'bg-sky-blue-alt'
 			<c:forEach var="todoNumber" items="${todoNumberList}">
 			datas.push({

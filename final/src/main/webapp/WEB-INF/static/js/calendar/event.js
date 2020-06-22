@@ -39,6 +39,8 @@ export const Calendar = (id) => ({
 			const day = `${parseInt(el.textContent) < 10 ? '0' : ''}${el.textContent}`;
 			date = `${year}-${month}-${day}`;
 		}
+
+		window.location = `${root}/todo/list/${date}`;
 	},
 	// 일정 클릭
 	onEventClick(e) {

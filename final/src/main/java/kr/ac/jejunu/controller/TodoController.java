@@ -6,11 +6,17 @@ import kr.ac.jejunu.entity.User;
 import kr.ac.jejunu.repository.TodoJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -55,5 +61,37 @@ public class TodoController {
 		modelAndView.addObject("user", user);
 
 		return modelAndView;
+	}
+
+	@GetMapping("/todo/list/{date}")
+	public ModelAndView getMyTodoListByDate(HttpServletRequest request, @PathVariable String date) throws ParseException {
+		HttpSession session = request.getSession();
+		User user = (User)session.getAttribute("user");
+		ModelAndView modelAndView = new ModelAndView("todoList");
+		List<Todo> myTodoList = todoJpaRepository.findAllByUser(user);
+		List<Todo> myDayTodoList = new ArrayList<>();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(date));
+		final long day = 24 * 60 * 60 * 1000;
+		for (Todo todo : myTodoList) {
+			if ((todo.getTime().getTimeInMillis() - calendar.getTimeInMillis()) / day == 0) {
+				myDayTodoList.add(todo);
+			}
+		}
+
+		modelAndView.addObject("today", date);
+		modelAndView.addObject("todoList", myDayTodoList);
+		modelAndView.addObject("user", user);
+
+		return modelAndView;
+	}
+
+	@DeleteMapping("/todo/delete/{no}")
+	public @ResponseBody Todo deleteMyTodo(@PathVariable Integer no) {
+		Todo deletedTodo = todoJpaRepository.findById(no).get();
+
+		todoJpaRepository.deleteById(no);
+
+		return deletedTodo;
 	}
 }
