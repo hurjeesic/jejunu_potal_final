@@ -6,10 +6,7 @@ import kr.ac.jejunu.entity.User;
 import kr.ac.jejunu.repository.TodoJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -86,12 +83,26 @@ public class TodoController {
 		return modelAndView;
 	}
 
+	@PostMapping("/todo/insert")
+	public @ResponseBody Todo insertMyTodo(HttpServletRequest request, @ModelAttribute Todo todo) {
+		HttpSession session = request.getSession();
+
+		todo.setUser((User)session.getAttribute("user"));
+
+		return todoJpaRepository.save(todo);
+	}
+
 	@DeleteMapping("/todo/delete/{no}")
-	public @ResponseBody Todo deleteMyTodo(@PathVariable Integer no) {
-		Todo deletedTodo = todoJpaRepository.findById(no).get();
+	public @ResponseBody Integer deleteMyTodo(HttpServletRequest request, @PathVariable Integer no) {
+		HttpSession session = request.getSession();
+		User user = (User)session.getAttribute("user");
 
-		todoJpaRepository.deleteById(no);
+		if (todoJpaRepository.findById(no).get().getUser().equals(user)) {
+			todoJpaRepository.deleteById(no);
 
-		return deletedTodo;
+			return no;
+		}
+
+		return null;
 	}
 }

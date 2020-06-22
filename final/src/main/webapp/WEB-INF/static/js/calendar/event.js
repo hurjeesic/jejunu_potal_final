@@ -53,6 +53,8 @@ export const Calendar = (id) => ({
 		else {
 			date = el.getAttribute('time').split(' ')[0];
 		}
+
+		window.location = `${root}/todo/list/${date}`;
 	},
 	bindData(events) {
 		this.data = events;

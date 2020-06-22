@@ -22,19 +22,16 @@
 		const todoList = [];
 		<c:forEach var="todo" items="${todoList}">
 		todoList.push({
-			no: '${todo.no}',
-			title: '${todo.title}',
-			number: '${todo.time}',
-			complete: ${todo.complete}
-		});
+            no: '${todo.no}',
+            title: '${todo.title}',
+            time: '${todo.time.time}',
+            complete: ${todo.complete}
+        });
 		</c:forEach>
 		</c:if>
-
-		function saveData(data) {
-			console.log(data);
-		}
     </script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+    <script type="module" src="<%= request.getContextPath() %>/js/myLibrary.js"></script>
     <script type="module" src="<%= request.getContextPath() %>/js/todo/index.js"></script>
 </head>
 <body>

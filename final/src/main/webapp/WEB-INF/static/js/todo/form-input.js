@@ -13,13 +13,30 @@ function init(data, today) {
 		}
 
 		$input.value = '';
-		data.push({
-			title: todo.title,
-			time: today,
-			complete: false
-		});
+		// 아이템 추가
+		$.ajax({
+			url: `${root}/todo/insert`,
+			method: 'post',
+			dataType: 'json',
+			data: {
+				title: text,
+				time: today,
+				complete: false
+			},
+			success: (insertedTodo) => {
+				data.push({
+					no: insertedTodo.no,
+					title: insertedTodo.title,
+					time: new Date(insertedTodo.time.time),
+					complete: insertedTodo.complete
+				});
 
-		render(data);
+				render(data);
+			},
+			error: (error) => {
+				alert('서버 오류로 추가할 수 없습니다.');
+			}
+		});
 	});
 }
 

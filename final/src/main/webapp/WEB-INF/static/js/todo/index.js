@@ -5,15 +5,24 @@ const $result = document.querySelector('#result');
 
 $result.addEventListener('click', (event) => {
 	const { className } = event.target;
-	const { index } = event.target.parentElement.dataset;
+	const { index, no } = event.target.parentElement.dataset;
 	if (className === 'delete') {
-		todoList.splice(index, 1);
+		$.ajax({
+			url: `${root}/todo/delete/${no}`,
+			method: 'delete',
+			dataType: 'json',
+			success: (data) => {
+				todoList.splice(index, 1);
+				render(todoList);
+			},
+			error: (error) => {
+				alert('서버 오류로 삭제할 수 없습니다.');
+			}
+		});
 	}
 	else if (className === 'toggle-checked') {
-		// todos[index].isDone = !todos[index].isDone;
+		todoList[index].complete = !todoList[index].complete;
 	}
-
-	render(todoList);
 });
 
 formInput.init(todoList, today);
