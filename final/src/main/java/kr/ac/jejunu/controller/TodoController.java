@@ -36,7 +36,12 @@ public class TodoController {
 				String monthStr = (todoDate.get(Calendar.MONTH) < 9 ? "0" : "") + (todoDate.get(Calendar.MONTH) + 1);
 				String dateStr = todoDate.get(Calendar.YEAR) + "-" + monthStr + "-" + todoDate.get(Calendar.DATE);
 				if (todoNumberList.get(dateStr) == null) {
-					todoNumberList.put(dateStr, TodoNumber.builder().total(0).process(0).complete(0).build());
+					if (todo.getComplete()) {
+						todoNumberList.put(dateStr, TodoNumber.builder().total(1).process(0).complete(1).build());
+					}
+					else {
+						todoNumberList.put(dateStr, TodoNumber.builder().total(1).process(1).complete(0).build());
+					}
 				}
 				else {
 					TodoNumber todoNumber = todoNumberList.get(dateStr);
