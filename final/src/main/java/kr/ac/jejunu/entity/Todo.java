@@ -3,6 +3,7 @@ package kr.ac.jejunu.entity;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Calendar;
@@ -22,6 +23,10 @@ public class Todo {
 	@JoinColumn(name = "userinfo", nullable = false)
 	@ManyToOne(targetEntity = User.class)
 	private User user;
+
+	@Column(name = "time", nullable = false)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Calendar time;
 
 	@Column(name = "created_time")
 	@CreatedDate
