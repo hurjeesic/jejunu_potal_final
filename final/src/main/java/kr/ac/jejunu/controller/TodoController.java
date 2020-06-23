@@ -89,7 +89,8 @@ public class TodoController {
 	}
 
 	@PostMapping("/todo/insert")
-	public @ResponseBody Todo insertMyTodo(HttpServletRequest request, @ModelAttribute Todo todo) {
+	@ResponseBody
+	public Todo insertMyTodo(HttpServletRequest request, @ModelAttribute Todo todo) {
 		HttpSession session = request.getSession();
 
 		todo.setUser((User)session.getAttribute("user"));
@@ -97,8 +98,27 @@ public class TodoController {
 		return todoJpaRepository.save(todo);
 	}
 
+	@RequestMapping(value = { "/todo/confirm/{no}", "/todo/update/{no}" })
+	public ModelAndView confirmUpdateFormMyTodo(HttpServletRequest request, @PathVariable Integer no) {
+		ModelAndView modelAndView = new ModelAndView("update");
+
+		modelAndView.addObject("todo", todoJpaRepository.findById(no).get());
+
+		return modelAndView;
+	}
+
+	@PutMapping("/todo/update/{no}")
+	public ModelAndView updateMyTodo(HttpServletRequest request, @PathVariable Integer no) {
+		ModelAndView modelAndView = new ModelAndView("redirect:/todo/confirm/" + no);
+
+		modelAndView.addObject("todo", todoJpaRepository.findById(no).get());
+
+		return modelAndView;
+	}
+
 	@DeleteMapping("/todo/delete/{no}")
-	public @ResponseBody Integer deleteMyTodo(HttpServletRequest request, @PathVariable Integer no) {
+	@ResponseBody
+	public Integer deleteMyTodo(HttpServletRequest request, @PathVariable Integer no) {
 		HttpSession session = request.getSession();
 		User user = (User)session.getAttribute("user");
 

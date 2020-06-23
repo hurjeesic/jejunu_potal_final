@@ -4,9 +4,9 @@ import formInput from './form-input.js';
 const $result = document.querySelector('#result');
 
 $result.addEventListener('click', (event) => {
-	const { className } = event.target;
+	const { className, id } = event.target;
 	const { index, no } = event.target.parentElement.dataset;
-	if (className === 'delete') {
+	if (id === 'delete') {
 		$.ajax({
 			url: `${root}/todo/delete/${no}`,
 			method: 'delete',
@@ -19,6 +19,9 @@ $result.addEventListener('click', (event) => {
 				alert('서버 오류로 삭제할 수 없습니다.');
 			}
 		});
+	}
+	else if (id === 'confirm') {
+		window.location = `${root}/todo/confirm/${no}`;
 	}
 	else if (className === 'toggle-checked') {
 		todoList[index].complete = !todoList[index].complete;
