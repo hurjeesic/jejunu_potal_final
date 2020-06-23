@@ -20,9 +20,9 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="<%= request.getContextPath() %>/js/update/main.js"></script>
     <script>
-        <c:if test="${msg != null}">
-            alert('${msg}');
-        </c:if>
+		<c:if test="${msg != null}">
+		alert('${msg}');
+		</c:if>
 		window.onload = () => {
 			const myDate = new Date(${todo.time.timeInMillis});
 			const year = myDate.getFullYear();
@@ -31,11 +31,11 @@
 			document.getElementById('mainTitle').textContent =
 				year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
 
+			<c:if test="${title eq 'Todo 수정'}">
 			document.getElementById('imageFile').addEventListener('change', (event) => {
 				changeImage(event);
 			});
-
-			// updateBtn;
+			</c:if>
 		};
     </script>
 </head>
