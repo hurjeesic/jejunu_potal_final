@@ -40,7 +40,7 @@
     </script>
 </head>
 <body>
-<form action="<%= request.getContextPath() %>/todo/update/${no}" method="post">
+<form action="<%= request.getContextPath() %>/todo/update/${no}" method="post" enctype="multipart/form-data">
     <div class="container">
         <header>
             <h1 id="mainTitle"></h1>
@@ -100,7 +100,7 @@
                                     <a class="form-control">파일 없음</a>
                                 </c:when>
                                 <c:otherwise>
-                                    <a href="<%= request.getContextPath() %>/download/${no}/${todo.fileName}" class="form-control">다운로드</a>
+                                    <a href="<%= request.getContextPath() %>/todo/download/${no}" class="form-control">다운로드</a>
                                 </c:otherwise>
                             </c:choose>
 

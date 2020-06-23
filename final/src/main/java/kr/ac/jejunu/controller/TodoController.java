@@ -5,6 +5,11 @@ import kr.ac.jejunu.entity.TodoNumber;
 import kr.ac.jejunu.entity.User;
 import kr.ac.jejunu.repository.TodoJpaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +18,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -124,19 +137,34 @@ public class TodoController {
 	}
 
 	@PostMapping("/todo/update/{no}")
-	public ModelAndView updateMyTodo(HttpServletRequest request, @PathVariable Integer no, @ModelAttribute Todo todo, @Nullable MultipartFile image, @Nullable MultipartFile file) {
+	public ModelAndView updateMyTodo(HttpServletRequest request, @PathVariable Integer no, @ModelAttribute Todo todo, @Nullable @RequestParam MultipartFile image, @Nullable @RequestParam MultipartFile file) {
 		ModelAndView modelAndView = new ModelAndView("redirect:/todo/confirm/" + no);
 		HttpSession session = request.getSession();
 		User user = (User)session.getAttribute("user");
 
 		Todo original = todoJpaRepository.findById(no).get();
 		if (original.getUser().equals(user)) {
-			System.out.println(todo.toString());
 			todo.setNo(no);
 			todo.setUser(user);
 			todo.setTime(original.getTime());
 			if (todo.getComplete() == null) {
 				todo.setComplete(original.getComplete());
+			}
+
+			if (image != null && !image.getOriginalFilename().equals("")) {
+				todo.setImageName(image.getOriginalFilename());
+				uploadFile(request, no, "image", original.getImageName(), image);
+			}
+			else if (todo.getImageName() != null) {
+				todo.setImageName(original.getImageName());
+			}
+
+			if (file != null && !file.getOriginalFilename().equals("")) {
+				todo.setFileName(file.getOriginalFilename());
+				uploadFile(request, no, "result", original.getFileName(), file);
+			}
+			else if (todo.getFileName() != null) {
+				todo.setFileName(original.getFileName());
 			}
 
 			todoJpaRepository.save(todo);
@@ -146,6 +174,55 @@ public class TodoController {
 		modelAndView.addObject("todo", todoJpaRepository.findById(no).get());
 
 		return modelAndView;
+	}
+
+	private void uploadFile(HttpServletRequest request, Integer no, String directory, String originalFileName, MultipartFile file) {
+		File newFile;
+		FileOutputStream fileOutputStream = null;
+		BufferedOutputStream bufferedOutputStream = null;
+
+		try {
+			// 폴더가 없으면 생성
+			newFile = new File(request.getServletContext().getRealPath("/") + "/WEB-INF/static/" + directory + "/" + no);
+			newFile.mkdir();
+
+			// 기존 파일 삭제
+			originalFileName = no + "/" + originalFileName;
+			newFile = new File(request.getServletContext().getRealPath("/") + "/WEB-INF/static/" + directory + "/" + originalFileName);
+			newFile.delete();
+
+			// 새로운 파일 삽입
+			String fileName = no + "/" + file.getOriginalFilename();
+			newFile = new File(request.getServletContext().getRealPath("/") + "/WEB-INF/static/" + directory + "/" + fileName);
+			fileOutputStream = new FileOutputStream(newFile);
+			bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
+			bufferedOutputStream.write(file.getBytes());
+		}
+		catch (IOException ie) {
+			ie.printStackTrace();
+		}
+		catch (RuntimeException re) {
+			re.printStackTrace();
+		}
+		finally {
+			try {
+				if (bufferedOutputStream != null) {
+					bufferedOutputStream.close();
+				}
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			try {
+				if (fileOutputStream != null) {
+					fileOutputStream.close();
+				}
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@DeleteMapping("/todo/delete/{no}")
