@@ -5,12 +5,24 @@ import kr.ac.jejunu.entity.TodoNumber;
 import kr.ac.jejunu.entity.User;
 import kr.ac.jejunu.repository.TodoJpaRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.IOUtils;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -89,7 +101,8 @@ public class TodoController {
 	}
 
 	@PostMapping("/todo/insert")
-	public @ResponseBody Todo insertMyTodo(HttpServletRequest request, @ModelAttribute Todo todo) {
+	@ResponseBody
+	public Todo insertMyTodo(HttpServletRequest request, @ModelAttribute Todo todo) {
 		HttpSession session = request.getSession();
 
 		todo.setUser((User)session.getAttribute("user"));
@@ -97,8 +110,131 @@ public class TodoController {
 		return todoJpaRepository.save(todo);
 	}
 
+	@RequestMapping(value = { "/todo/confirm/{no}", "/todo/update/{no}" })
+	public ModelAndView confirmUpdateFormMyTodo(HttpServletRequest request, @PathVariable Integer no) {
+		ModelAndView modelAndView = new ModelAndView("update");
+
+		String url = request.getRequestURL().toString();
+		String[] urlAry = url.split("/");
+		String title = null;
+		switch (urlAry[urlAry.length - 2]) {
+			case "confirm":
+				title = "Todo 확인";
+				break;
+			case "update":
+				title = "Todo 수정";
+				break;
+		}
+
+		modelAndView.addObject("no", no);
+		modelAndView.addObject("title", title);
+		modelAndView.addObject("todo", todoJpaRepository.findById(no).get());
+
+		return modelAndView;
+	}
+
+	@PostMapping("/todo/update/{no}")
+	public ModelAndView updateMyTodo(HttpServletRequest request, @PathVariable Integer no, @ModelAttribute Todo todo, @Nullable @RequestParam MultipartFile image, @Nullable @RequestParam MultipartFile file) {
+		ModelAndView modelAndView = new ModelAndView("redirect:/todo/confirm/" + no);
+		HttpSession session = request.getSession();
+		User user = (User)session.getAttribute("user");
+
+		Todo original = todoJpaRepository.findById(no).get();
+		if (original.getUser().equals(user)) {
+			todo.setNo(no);
+			todo.setUser(user);
+			todo.setTime(original.getTime());
+			if (todo.getComplete() == null) {
+				todo.setComplete(original.getComplete());
+			}
+
+			if (image != null && !image.getOriginalFilename().equals("")) {
+				todo.setImageName(image.getOriginalFilename());
+				uploadFile(request, no, "image", original.getImageName(), image);
+			}
+			else if (todo.getImageName() != null) {
+				todo.setImageName(original.getImageName());
+			}
+
+			if (file != null && !file.getOriginalFilename().equals("")) {
+				todo.setFileName(file.getOriginalFilename());
+				uploadFile(request, no, "result", original.getFileName(), file);
+			}
+			else if (todo.getFileName() != null) {
+				todo.setFileName(original.getFileName());
+			}
+
+			todoJpaRepository.save(todo);
+			modelAndView.addObject("msg", "수정되었습니다.");
+		}
+
+		modelAndView.addObject("todo", todoJpaRepository.findById(no).get());
+
+		return modelAndView;
+	}
+
+	private void uploadFile(HttpServletRequest request, Integer no, String directory, String originalFileName, MultipartFile file) {
+		File newFile;
+		FileOutputStream fileOutputStream = null;
+		BufferedOutputStream bufferedOutputStream = null;
+
+		try {
+			// 폴더가 없으면 생성
+			newFile = new File(request.getServletContext().getRealPath("/") + "/WEB-INF/static/" + directory + "/" + no);
+			newFile.mkdir();
+
+			// 기존 파일 삭제
+			originalFileName = no + "/" + originalFileName;
+			newFile = new File(request.getServletContext().getRealPath("/") + "/WEB-INF/static/" + directory + "/" + originalFileName);
+			newFile.delete();
+
+			// 새로운 파일 삽입
+			String fileName = no + "/" + file.getOriginalFilename();
+			newFile = new File(request.getServletContext().getRealPath("/") + "/WEB-INF/static/" + directory + "/" + fileName);
+			fileOutputStream = new FileOutputStream(newFile);
+			bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
+			bufferedOutputStream.write(file.getBytes());
+		}
+		catch (IOException ie) {
+			ie.printStackTrace();
+		}
+		catch (RuntimeException re) {
+			re.printStackTrace();
+		}
+		finally {
+			try {
+				if (bufferedOutputStream != null) {
+					bufferedOutputStream.close();
+				}
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			try {
+				if (fileOutputStream != null) {
+					fileOutputStream.close();
+				}
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@GetMapping("/todo/download/{no}")
+	public void downloadTodoFile(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer no) throws IOException {
+		String fileName = todoJpaRepository.findById(no).get().getFileName();
+		Path path = Paths.get(request.getServletContext().getRealPath("/") + "/WEB-INF/static/result/" + no + "/" + fileName);
+		String encodedFileName = URLEncoder.encode(fileName, "UTF-8").replace("+", "%20");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + encodedFileName + "\";");
+
+		IOUtils.copy(Files.newInputStream(path), response.getOutputStream());
+	}
+
 	@DeleteMapping("/todo/delete/{no}")
-	public @ResponseBody Integer deleteMyTodo(HttpServletRequest request, @PathVariable Integer no) {
+	@ResponseBody
+	public Integer deleteMyTodo(HttpServletRequest request, @PathVariable Integer no) {
 		HttpSession session = request.getSession();
 		User user = (User)session.getAttribute("user");
 

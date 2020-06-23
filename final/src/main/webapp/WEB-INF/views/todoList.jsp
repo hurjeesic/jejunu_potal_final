@@ -30,6 +30,11 @@
 		});
 		</c:forEach>
 		</c:if>
+
+        window.onload = () => {
+	        document.getElementById('title').textContent =
+		        window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+        }
     </script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
     <script type="module" src="<%= request.getContextPath() %>/js/myLibrary.js"></script>
@@ -38,7 +43,7 @@
 <body>
 <div class="container">
     <header>
-        <h1>Todo List</h1>
+        <h1 id="title">Todo List</h1>
 
         <form class="new-task" id="input-form">
             <input type="text" name="text" id="input" placeholder="할 일을 입력하세요"/>

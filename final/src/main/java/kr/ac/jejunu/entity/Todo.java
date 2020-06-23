@@ -42,6 +42,12 @@ public class Todo {
 	@Column(name = "content")
 	private String content;
 
+	@Column(name = "image_name")
+	private String imageName;
+
+	@Column(name = "file_name")
+	private String fileName;
+
 	@Column(name = "complete", columnDefinition = "boolean default false")
 	private Boolean complete;
 }

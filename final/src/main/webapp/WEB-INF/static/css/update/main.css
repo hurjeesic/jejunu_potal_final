@@ -1,0 +1,100 @@
+body {
+    font-family: sans-serif;
+    background-color: #315481;
+    background-image: linear-gradient(to bottom, #315481, #918e82 100%);
+    background-attachment: fixed;
+
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    padding: 0;
+    margin: 0;
+
+    font-size: 14px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+    min-height: 100vh;
+    margin: 0 auto;
+    background: white;
+}
+
+header {
+    background: #d2edf4;
+    background-image: linear-gradient(to bottom, #d0edf5, #e1e5f0 100%);
+    padding: 20px 15px 15px 15px;
+    position: relative;
+}
+
+#mainTitle {
+    text-align: center;
+}
+
+/* Copy this code in your css file. */
+
+.preview
+{
+    /*max-width: 70%;*/
+    max-height: 45%;
+    padding: 10px;
+    position: relative;
+    margin: auto;
+}
+
+.preview i
+{
+    color: white;
+    font-size: 35px;
+    transform: translate(50px,130px);
+}
+
+.preview-img
+{
+    max-width: 570px;
+    max-height: 380px;
+    box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.7);
+}
+
+.browse-button
+{
+    width: 100%;
+    height: 100%;
+    position: absolute; /* Tweak the position property if the element seems to be unfit */
+    top: 0px;
+    left: 0px;
+    background: linear-gradient(180deg, transparent, black);
+    opacity: 0;
+    transition: 0.3s ease;
+}
+
+.browse-button:hover
+{
+    opacity: 1;
+}
+
+.browse-input
+{
+    width: 100%;
+    height: 100%;
+    transform: translate(-1px,-26px);
+    opacity: 0;
+    cursor: pointer;
+}
+
+.Error
+{
+    color: crimson;
+    font-size: 13px;
+}
+
+#updatedForm {
+    /*max-width: 570px;*/
+    /*position: absolute;*/
+    /*bottom: 5px;*/
+}

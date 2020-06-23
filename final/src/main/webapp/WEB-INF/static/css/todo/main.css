@@ -31,6 +31,10 @@ header {
     position: relative;
 }
 
+#title {
+    text-align: center;
+}
+
 #login-buttons {
     display: block;
 }

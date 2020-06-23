@@ -42,4 +42,6 @@ dependencies {
     implementation "org.hibernate:hibernate-entitymanager:5.4.17.Final"
 
     implementation "javax.servlet:jstl:1.2"
+
+    implementation "commons-io:commons-io:2.6"
 }
