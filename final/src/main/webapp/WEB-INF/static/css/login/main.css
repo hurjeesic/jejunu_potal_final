@@ -4,8 +4,6 @@ body {
     font-family: 'Mukta', sans-serif;
     height: 100vh;
     min-height: 550px;
-    background-image: url(http://www.planwallpaper.com/static/images/Free-Wallpaper-Nature-Scenes.jpg);
-    background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
     position: relative;
@@ -134,19 +132,6 @@ a {
     width: 100%;
     display: block;
     margin: 20px 0;
-    padding: 15px;
-    border: 1px solid #b5b5b5;
-    outline: none;
-}
-
-#emailForm {
-    width: 100%;
-    display: block;
-    margin: 20px 0;
-}
-
-.register-show input[type="email"] {
-    width: 70%;
     padding: 15px;
     border: 1px solid #b5b5b5;
     outline: none;

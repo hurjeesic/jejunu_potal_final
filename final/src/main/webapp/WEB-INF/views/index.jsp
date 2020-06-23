@@ -17,22 +17,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Main</title>
-
     <link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
     <link rel="stylesheet" href="css/calendar/calendar.css">
     <link rel="stylesheet" href="css/calendar/main.css">
     <link rel="stylesheet" href="css/calendar/spinner.css">
     <link rel="stylesheet" href="css/calendar/style.css">
-    <style>
-        .pull-left {
-            float: left;
-        }
-
-        .pull-right {
-            float: right;
-        }
-    </style>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>

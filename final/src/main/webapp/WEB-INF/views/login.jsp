@@ -11,16 +11,19 @@
 <html>
 <head>
     <title>Login</title>
-    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <link rel="stylesheet" href="css/login/main.css">
 
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script>
+	    const root = "<%= request.getContextPath() %>";
+    </script>
     <script src="js/login/main.js"></script>
 </head>
 <body>
-<c:if test='${error != null}'>
-    <script>alert('${error}')</script>
+<c:if test='${msg != null}'>
+    <script>alert('${msg}')</script>
 </c:if>
 <div class="login-reg-panel">
     <div class="login-info-box">
@@ -47,18 +50,16 @@
                 <a href="">비밀번호를 잊으셨나요?</a>
             </div>
         </form>
-        <div class="register-show">
-            <h2>회원가입</h2>
-            <input type="text" placeholder="아이디">
-            <div id="emailForm">
-                <input type="email" placeholder="이메일">
-                <input type="button" id="confirm" value="확인">
+        <form name="register" action="/user/register" method="post">
+            <div class="register-show">
+                <h2>회원가입</h2>
+                <input type="text" name="id" id="idTxt" placeholder="아이디">
+                <input type="password" name="password" id="pwdTxt" placeholder="비밀번호">
+                <input type="password" id="confirmPwdTxt" placeholder="비밀번호 확인">
+                <input type="text" name="nickname" id="nicknameTxt" placeholder="별명">
+                <input type="button" id="registerBtn" value="가입">
             </div>
-            <input type="password" placeholder="비밀번호">
-            <input type="password" placeholder="비밀번호 확인">
-            <input type="text" placeholder="별명">
-            <input type="button" value="가입">
-        </div>
+        </form>
     </div>
 </div>
 </body>
