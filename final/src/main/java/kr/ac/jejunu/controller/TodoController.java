@@ -5,8 +5,10 @@ import kr.ac.jejunu.entity.TodoNumber;
 import kr.ac.jejunu.entity.User;
 import kr.ac.jejunu.repository.TodoJpaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -102,14 +104,44 @@ public class TodoController {
 	public ModelAndView confirmUpdateFormMyTodo(HttpServletRequest request, @PathVariable Integer no) {
 		ModelAndView modelAndView = new ModelAndView("update");
 
+		String url = request.getRequestURL().toString();
+		String[] urlAry = url.split("/");
+		String title = null;
+		switch (urlAry[urlAry.length - 2]) {
+			case "confirm":
+				title = "Todo 확인";
+				break;
+			case "update":
+				title = "Todo 수정";
+				break;
+		}
+
+		modelAndView.addObject("no", no);
+		modelAndView.addObject("title", title);
 		modelAndView.addObject("todo", todoJpaRepository.findById(no).get());
 
 		return modelAndView;
 	}
 
-	@PutMapping("/todo/update/{no}")
-	public ModelAndView updateMyTodo(HttpServletRequest request, @PathVariable Integer no) {
+	@PostMapping("/todo/update/{no}")
+	public ModelAndView updateMyTodo(HttpServletRequest request, @PathVariable Integer no, @ModelAttribute Todo todo, @Nullable MultipartFile image, @Nullable MultipartFile file) {
 		ModelAndView modelAndView = new ModelAndView("redirect:/todo/confirm/" + no);
+		HttpSession session = request.getSession();
+		User user = (User)session.getAttribute("user");
+
+		Todo original = todoJpaRepository.findById(no).get();
+		if (original.getUser().equals(user)) {
+			System.out.println(todo.toString());
+			todo.setNo(no);
+			todo.setUser(user);
+			todo.setTime(original.getTime());
+			if (todo.getComplete() == null) {
+				todo.setComplete(original.getComplete());
+			}
+
+			todoJpaRepository.save(todo);
+			modelAndView.addObject("msg", "수정되었습니다.");
+		}
 
 		modelAndView.addObject("todo", todoJpaRepository.findById(no).get());
 
