@@ -5,11 +5,7 @@ import kr.ac.jejunu.entity.TodoNumber;
 import kr.ac.jejunu.entity.User;
 import kr.ac.jejunu.repository.TodoJpaRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.apache.commons.io.IOUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -223,6 +220,16 @@ public class TodoController {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	@GetMapping("/todo/download/{no}")
+	public void downloadTodoFile(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer no) throws IOException {
+		String fileName = todoJpaRepository.findById(no).get().getFileName();
+		Path path = Paths.get(request.getServletContext().getRealPath("/") + "/WEB-INF/static/result/" + no + "/" + fileName);
+		String encodedFileName = URLEncoder.encode(fileName, "UTF-8").replace("+", "%20");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + encodedFileName + "\";");
+
+		IOUtils.copy(Files.newInputStream(path), response.getOutputStream());
 	}
 
 	@DeleteMapping("/todo/delete/{no}")
