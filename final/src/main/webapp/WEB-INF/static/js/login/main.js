@@ -55,7 +55,7 @@ function confirmId() {
 			data: { id: idTxt.value },
 			success: (data) => {
 				isId = data;
-				if (!data) {
+				if (data) {
 					alert('중복확인이 완료되었습니다.');
 					idTxt.disabled = true;
 					confirmIdBtn.disabled = true;
@@ -85,7 +85,7 @@ function confirmNickname() {
 			data: { nickname: nicknameTxt.value },
 			success: (data) => {
 				isNickname = data;
-				if (!data) {
+				if (data) {
 					alert('중복확인이 완료되었습니다.');
 					nicknameTxt.disabled = true;
 					confirmNicknameBtn.disabled = true;

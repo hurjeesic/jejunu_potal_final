@@ -2,6 +2,7 @@ package kr.ac.jejunu.controller;
 
 import kr.ac.jejunu.entity.User;
 import kr.ac.jejunu.repository.UserJpaRepository;
+import kr.ac.jejunu.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ import java.util.Optional;
 @Controller
 @RequiredArgsConstructor
 public class UserController {
-	private final UserJpaRepository userJpaRepository;
+	private final UserService userService;
 
 	@GetMapping("/login")
 	public ModelAndView showLogin() {
@@ -22,14 +23,12 @@ public class UserController {
 	}
 
 	@PostMapping("/login")
-	public ModelAndView login(HttpServletRequest request, @ModelAttribute User user) {
-		HttpSession session = request.getSession();
+	public ModelAndView login(HttpSession session, @ModelAttribute User user) {
 		ModelAndView modelAndView = new ModelAndView("redirect:index");
-		String id = user.getId();
-		Optional<User> loginUser = userJpaRepository.findByIdAndPassword(user.getId(), user.getPassword());
+		Optional<User> loginUser = userService.loginUser(user.getId(), user.getPassword());
 		if (!loginUser.isPresent()) {
 			modelAndView.setViewName("login");
-			modelAndView.addObject("id", id);
+			modelAndView.addObject("id", user.getId());
 			modelAndView.addObject("msg", "아이디 또는 비밀번호를 다시 확인해주세요.");
 		}
 		else {
@@ -43,7 +42,7 @@ public class UserController {
 	public ModelAndView insertUser(@ModelAttribute User user) {
 		ModelAndView modelAndView = new ModelAndView("redirect:../login");
 
-		userJpaRepository.save(user);
+		userService.insertUser(user);
 		modelAndView.addObject("msg", "가입되었습니다.");
 
 		return modelAndView;
@@ -52,12 +51,12 @@ public class UserController {
 	@GetMapping("/user/id/confirm")
 	@ResponseBody
 	public boolean confirmId(@RequestParam String id) {
-		return userJpaRepository.findById(id).isPresent();
+		return userService.confirmId(id);
 	}
 
 	@GetMapping("/user/nickname/confirm")
 	@ResponseBody
 	public boolean confirmNickname(@RequestParam String nickname) {
-		return userJpaRepository.findByNickname(nickname).isPresent();
+		return userService.confirmNickname(nickname);
 	}
 }
