@@ -40,12 +40,24 @@ public class UserController {
 	}
 
 	@PostMapping("/user/register")
-	public ModelAndView insertUser(HttpServletRequest request, @ModelAttribute User user) {
+	public ModelAndView insertUser(@ModelAttribute User user) {
 		ModelAndView modelAndView = new ModelAndView("redirect:../login");
 
 		userJpaRepository.save(user);
 		modelAndView.addObject("msg", "가입되었습니다.");
 
 		return modelAndView;
+	}
+
+	@GetMapping("/user/id/confirm")
+	@ResponseBody
+	public boolean confirmId(@RequestParam String id) {
+		return userJpaRepository.findById(id).isPresent();
+	}
+
+	@GetMapping("/user/nickname/confirm")
+	@ResponseBody
+	public boolean confirmNickname(@RequestParam String nickname) {
+		return userJpaRepository.findByNickname(nickname).isPresent();
 	}
 }

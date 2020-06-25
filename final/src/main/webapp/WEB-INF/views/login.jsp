@@ -17,14 +17,14 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script>
-	    const root = "<%= request.getContextPath() %>";
+		const root = "<%= request.getContextPath() %>";
+		<c:if test='${msg != null}'>
+		alert('${msg}');
+		</c:if>
     </script>
     <script src="js/login/main.js"></script>
 </head>
 <body>
-<c:if test='${msg != null}'>
-    <script>alert('${msg}')</script>
-</c:if>
 <div class="login-reg-panel">
     <div class="login-info-box">
         <h2>계정이 있으신가요?</h2>
@@ -53,10 +53,16 @@
         <form name="register" action="/user/register" method="post">
             <div class="register-show">
                 <h2>회원가입</h2>
-                <input type="text" name="id" id="idTxt" placeholder="아이디">
+                <div class="checkLine">
+                    <input type="text" name="id" class="checkLine" id="idTxt" placeholder="아이디">
+                    <input type="button" class="checkLine" id="confirmIdBtn" value="중복확인">
+                </div>
                 <input type="password" name="password" id="pwdTxt" placeholder="비밀번호">
                 <input type="password" id="confirmPwdTxt" placeholder="비밀번호 확인">
-                <input type="text" name="nickname" id="nicknameTxt" placeholder="별명">
+                <div class="checkLine">
+                    <input type="text" name="nickname" id="nicknameTxt" placeholder="별명">
+                    <input type="button" class="checkLine" id="confirmNicknameBtn" value="중복확인">
+                </div>
                 <input type="button" id="registerBtn" value="가입">
             </div>
         </form>

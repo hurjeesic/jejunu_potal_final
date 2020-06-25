@@ -141,7 +141,6 @@ a {
 }
 
 .register-show input[type="button"] {
-    max-width: 150px;
     width: 100%;
     background: #444444;
     color: #f9f9f9;
@@ -151,11 +150,6 @@ a {
     border-radius: 2px;
     float: right;
     cursor: pointer;
-}
-
-#confirm {
-    max-width: 100px;
-    padding: 15px;
 }
 
 .credit {
@@ -176,4 +170,21 @@ a {
 a {
     text-decoration: none;
     color: #2c7715;
+}
+
+.checkLine {
+    margin: 20px 0px;
+    outline: none;
+}
+
+.checkLine input[type=text] {
+    width: 70%;
+    display: inline-block;
+    margin: 0px;
+}
+
+.checkLine input[type=button] {
+    width: 27%;
+    padding: 15px;
+    margin: 0px;
 }
