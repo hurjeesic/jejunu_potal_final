@@ -1,4 +1,3 @@
-<%@ page import="java.util.Calendar" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
@@ -14,6 +13,7 @@
 <html>
 <head>
     <title>${user.nickname}의 Todo List</title>
+    <jsp:include page="module.jsp" />
     <link rel="stylesheet" href="<%= request.getContextPath() %>/css/todo/main.css">
 
     <script>
@@ -36,11 +36,11 @@
 		        window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
         }
     </script>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
     <script type="module" src="<%= request.getContextPath() %>/js/myLibrary.js"></script>
     <script type="module" src="<%= request.getContextPath() %>/js/todo/index.js"></script>
 </head>
 <body>
+<jsp:include page="nav.jsp" />
 <div class="container">
     <header>
         <h1 id="title">Todo List</h1>

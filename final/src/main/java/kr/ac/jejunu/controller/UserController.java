@@ -24,7 +24,7 @@ public class UserController {
 
 	@PostMapping("/login")
 	public ModelAndView login(HttpSession session, @ModelAttribute User user) {
-		ModelAndView modelAndView = new ModelAndView("redirect:index");
+		ModelAndView modelAndView = new ModelAndView("redirect:/index");
 		Optional<User> loginUser = userService.loginUser(user.getId(), user.getPassword());
 		if (!loginUser.isPresent()) {
 			modelAndView.setViewName("login");
@@ -38,12 +38,28 @@ public class UserController {
 		return modelAndView;
 	}
 
+	@GetMapping("/logout")
+	public ModelAndView logout(HttpSession session) {
+		session.invalidate();
+
+		return new ModelAndView("redirect:/login");
+	}
+
 	@PostMapping("/user/register")
 	public ModelAndView insertUser(@ModelAttribute User user) {
 		ModelAndView modelAndView = new ModelAndView("redirect:../login");
 
 		userService.insertUser(user);
 		modelAndView.addObject("msg", "가입되었습니다.");
+
+		return modelAndView;
+	}
+
+	@GetMapping("/user/update")
+	public ModelAndView showUpdatedUser(HttpSession session) {
+		ModelAndView modelAndView = new ModelAndView("updatedUser");
+
+		modelAndView.addObject("user", session.getAttribute("user"));
 
 		return modelAndView;
 	}

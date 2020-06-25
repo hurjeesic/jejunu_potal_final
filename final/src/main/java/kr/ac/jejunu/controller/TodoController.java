@@ -70,7 +70,7 @@ public class TodoController {
 
 	@RequestMapping(value = { "/todo/confirm/{no}", "/todo/update/{no}" })
 	public ModelAndView confirmUpdateFormMyTodo(HttpServletRequest request, @PathVariable Integer no) {
-		ModelAndView modelAndView = new ModelAndView("update");
+		ModelAndView modelAndView = new ModelAndView("updatedTodo");
 		String title = todoService.getTitleForUrl(request);
 
 		modelAndView.addObject("no", no);

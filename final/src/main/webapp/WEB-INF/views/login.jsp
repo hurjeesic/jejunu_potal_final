@@ -14,11 +14,9 @@
 <html>
 <head>
     <title>Login</title>
-    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <jsp:include page="module.jsp" />
     <link rel="stylesheet" href="css/login/main.css">
 
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script>
 		const root = "<%= request.getContextPath() %>";
 		<c:if test='${msg != null}'>

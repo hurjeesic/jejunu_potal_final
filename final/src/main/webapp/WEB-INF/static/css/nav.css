@@ -1,0 +1,14 @@
+.navbar {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+.navbar a {
+    color: #000;
+    text-decoration: none;
+}
+
+myNavbar {
+    float: right;
+}
