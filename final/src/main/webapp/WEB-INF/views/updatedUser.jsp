@@ -13,77 +13,66 @@
 </c:if>
 <html>
 <head>
-    <title>Update User Information</title>
-    <jsp:include page="module.jsp" />
-    <style>
-        .container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-    </style>
+    <title>User Information</title>
+    <jsp:include page="module.jsp"/>
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/updatedUser/main.css">
+
+    <script>
+	    const root = '<%= request.getContextPath() %>';
+		<c:if test='${msg != null}'>
+		alert('${msg}');
+		</c:if>
+    </script>
+    <script src="<%= request.getContextPath() %>/js/updatedUser/main.js"></script>
 </head>
 <body>
-<jsp:include page="nav.jsp" />
+<jsp:include page="nav.jsp"/>
 <div class="container bootstrap snippet">
-    <h1 class="text-primary"><span class="glyphicon glyphicon-user"></span>Edit Profile</h1>
+    <h1 class="text-primary"><span class="glyphicon glyphicon-user"></span>${user.nickname}님의 회원 정보</h1>
     <hr>
     <div class="row">
         <!-- left column -->
-<%--        <div class="col-md-3">--%>
-<%--            <div class="text-center">--%>
-<%--                <img src="http//placehold.it/100" class="avatar img-circle" alt="avatar">--%>
-<%--                <h6>Upload a different photo...</h6>--%>
+        <%--        <div class="col-md-3">--%>
+        <%--            <div class="text-center">--%>
+        <%--                <img src="http//placehold.it/100" class="avatar img-circle" alt="avatar">--%>
+        <%--                <h6>Upload a different photo...</h6>--%>
 
-<%--                <input type="file" class="form-control">--%>
-<%--            </div>--%>
-<%--        </div>--%>
+        <%--                <input type="file" class="form-control">--%>
+        <%--            </div>--%>
+        <%--        </div>--%>
 
         <!-- edit form column -->
         <div class="col-md-9 personal-info">
-            <h3>Personal info</h3>
-
-            <form class="form-horizontal" role="form">
+            <form name="updatedForm" method="post" class="form-horizontal">
                 <div class="form-group">
-                    <label class="col-lg-3 control-label">First name:</label>
+                    <label class="col-lg-3 control-label">아이디</label>
                     <div class="col-lg-8">
-                        <input class="form-control" type="text" value="dey-dey">
+                        <input type="text" name="id" class="form-control" value="${user.id}" disabled>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-3 control-label">Last name:</label>
+                    <label class="col-lg-3 control-label">비밀번호</label>
                     <div class="col-lg-8">
-                        <input class="form-control" type="text" value="bootdey">
+                        <input type="password" name="password" class="form-control" id="passwordTxt"
+                               value="${user.password}">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-3 control-label">Company:</label>
+                    <label class="col-lg-3 control-label">별명</label>
                     <div class="col-lg-8">
-                        <input class="form-control" type="text" value="">
+                        <input type="text" name="nickname" class="form-control" id="nicknameTxt"
+                               value="${user.nickname}">
+                        <input type="button" class="btn btn-dark" id="confirmNicknameBtn" value="중복확인">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-3 control-label">Email:</label>
                     <div class="col-lg-8">
-                        <input class="form-control" type="text" value="janesemail@gmail.com">
+                        <input type="button" class="btn btn-primary" id="updateBtn" value="수정하기">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-3 control-label">Time Zone:</label>
                     <div class="col-lg-8">
-                        <div class="ui-select">
-                            <select id="user_time_zone" class="form-control">
-                                <option value="Hawaii">(GMT-10:00) Hawaii</option>
-                                <option value="Alaska">(GMT-09:00) Alaska</option>
-                                <option value="Pacific Time (US &amp; Canada)">(GMT-08:00) Pacific Time (US &amp; Canada)</option>
-                                <option value="Arizona">(GMT-07:00) Arizona</option>
-                                <option value="Mountain Time (US &amp; Canada)">(GMT-07:00) Mountain Time (US &amp; Canada)</option>
-                                <option value="Central Time (US &amp; Canada)" selected="selected">(GMT-06:00) Central Time (US &amp; Canada)</option>
-                                <option value="Eastern Time (US &amp; Canada)">(GMT-05:00) Eastern Time (US &amp; Canada)</option>
-                                <option value="Indiana (East)">(GMT-05:00) Indiana (East)</option>
-                            </select>
-                        </div>
+                        <input type="button" class="btn btn-danger" id="withdrawalBtn" value="회원탈퇴">
                     </div>
                 </div>
             </form>

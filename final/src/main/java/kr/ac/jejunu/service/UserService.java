@@ -14,7 +14,30 @@ public class UserService {
 	private final UserJpaRepository userJpaRepository;
 
 	public User getUser(HttpSession session) {
-		return (User)session.getAttribute("user");
+		if (session.getAttribute("user") != null) {
+			return (User)session.getAttribute("user");
+		}
+
+		return null;
+	}
+
+	public User updateUser(User original, User user) {
+		user.setNo(original.getNo());
+		user.setId(original.getId());
+
+		System.out.println(user.toString());
+
+		return userJpaRepository.save(user);
+	}
+
+	public boolean deleteUser(User user, String password) {
+		if (user.getPassword().equals(password)) {
+			userJpaRepository.delete(user);
+
+			return true;
+		}
+
+		return false;
 	}
 
 	public Optional<User> loginUser(String id, String password) {
@@ -22,11 +45,11 @@ public class UserService {
 	}
 
 	public boolean confirmId(String id) {
-		return userJpaRepository.findById(id).isPresent();
+		return !userJpaRepository.findById(id).isPresent();
 	}
 
-	public boolean confirmNickname(String nickname) {
-		return !userJpaRepository.findByNickname(nickname).isPresent();
+	public boolean confirmNickname(User user, String nickname) {
+		return (user != null && user.getNickname().equals(nickname)) || !userJpaRepository.findByNickname(nickname).isPresent();
 	}
 
 	public void insertUser(User user) {
