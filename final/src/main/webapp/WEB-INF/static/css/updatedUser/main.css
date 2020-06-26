@@ -1,0 +1,21 @@
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+input[name="nickname"] {
+    display: inline-block;
+    width: 80%;
+}
+
+input[type="button"] {
+    width: 100%;
+}
+
+#confirmNicknameBtn {
+    display: inline-block;
+    float: right;
+    width: 18%;
+}

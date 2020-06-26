@@ -14,50 +14,36 @@
 <html>
 <head>
     <title>User Information</title>
-    <jsp:include page="module.jsp" />
-    <style>
-        .container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
+    <jsp:include page="module.jsp"/>
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/updatedUser/main.css">
 
-        input[name="nickname"] {
-            display: inline-block;
-            width: 80%;
-        }
-
-        input[type="button"] {
-            width: 100%;
-        }
-
-        #confirmNicknameBtn {
-            display: inline-block;
-            float: right;
-            width: 18%;
-        }
-    </style>
+    <script>
+	    const root = '<%= request.getContextPath() %>';
+		<c:if test='${msg != null}'>
+		alert('${msg}');
+		</c:if>
+    </script>
+    <script src="<%= request.getContextPath() %>/js/updatedUser/main.js"></script>
 </head>
 <body>
-<jsp:include page="nav.jsp" />
+<jsp:include page="nav.jsp"/>
 <div class="container bootstrap snippet">
     <h1 class="text-primary"><span class="glyphicon glyphicon-user"></span>${user.nickname}님의 회원 정보</h1>
     <hr>
     <div class="row">
         <!-- left column -->
-<%--        <div class="col-md-3">--%>
-<%--            <div class="text-center">--%>
-<%--                <img src="http//placehold.it/100" class="avatar img-circle" alt="avatar">--%>
-<%--                <h6>Upload a different photo...</h6>--%>
+        <%--        <div class="col-md-3">--%>
+        <%--            <div class="text-center">--%>
+        <%--                <img src="http//placehold.it/100" class="avatar img-circle" alt="avatar">--%>
+        <%--                <h6>Upload a different photo...</h6>--%>
 
-<%--                <input type="file" class="form-control">--%>
-<%--            </div>--%>
-<%--        </div>--%>
+        <%--                <input type="file" class="form-control">--%>
+        <%--            </div>--%>
+        <%--        </div>--%>
 
         <!-- edit form column -->
         <div class="col-md-9 personal-info">
-            <form class="form-horizontal" role="form">
+            <form name="updatedForm" method="post" class="form-horizontal">
                 <div class="form-group">
                     <label class="col-lg-3 control-label">아이디</label>
                     <div class="col-lg-8">
@@ -67,13 +53,15 @@
                 <div class="form-group">
                     <label class="col-lg-3 control-label">비밀번호</label>
                     <div class="col-lg-8">
-                        <input type="password" name="password" class="form-control" value="">
+                        <input type="password" name="password" class="form-control" id="passwordTxt"
+                               value="${user.password}">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-lg-3 control-label">별명</label>
                     <div class="col-lg-8">
-                        <input type="text" name="nickname" class="form-control" value="${user.nickname}">
+                        <input type="text" name="nickname" class="form-control" id="nicknameTxt"
+                               value="${user.nickname}">
                         <input type="button" class="btn btn-dark" id="confirmNicknameBtn" value="중복확인">
                     </div>
                 </div>

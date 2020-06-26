@@ -1,14 +1,12 @@
 package kr.ac.jejunu.controller;
 
 import kr.ac.jejunu.entity.User;
-import kr.ac.jejunu.repository.UserJpaRepository;
 import kr.ac.jejunu.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
@@ -64,6 +62,31 @@ public class UserController {
 		return modelAndView;
 	}
 
+	@PostMapping("/user/update")
+	public ModelAndView updateUser(HttpSession session, @ModelAttribute User user) {
+		ModelAndView modelAndView = new ModelAndView("redirect:/user/update");
+
+		session.setAttribute("user", userService.updateUser(userService.getUser(session), user));
+
+		return modelAndView;
+	}
+
+	@GetMapping("/user/delete")
+	public ModelAndView deleteUser(HttpSession session, @RequestParam String password) {
+		ModelAndView modelAndView;
+
+		if (userService.deleteUser(userService.getUser(session), password)) {
+			modelAndView = new ModelAndView("redirect:../login");
+			session.invalidate();
+		}
+		else {
+			modelAndView = new ModelAndView("redirect:/user/update");
+			modelAndView.addObject("msg", "비밀번호가 틀렸습니다.");
+		}
+
+		return modelAndView;
+	}
+
 	@GetMapping("/user/id/confirm")
 	@ResponseBody
 	public boolean confirmId(@RequestParam String id) {
@@ -72,7 +95,7 @@ public class UserController {
 
 	@GetMapping("/user/nickname/confirm")
 	@ResponseBody
-	public boolean confirmNickname(@RequestParam String nickname) {
-		return userService.confirmNickname(nickname);
+	public boolean confirmNickname(HttpSession session, @RequestParam String nickname) {
+		return userService.confirmNickname(userService.getUser(session), nickname);
 	}
 }
