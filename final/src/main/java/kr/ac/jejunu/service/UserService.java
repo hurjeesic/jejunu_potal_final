@@ -1,17 +1,21 @@
 package kr.ac.jejunu.service;
 
 import kr.ac.jejunu.entity.User;
+import kr.ac.jejunu.repository.TodoJpaRepository;
 import kr.ac.jejunu.repository.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.procedure.spi.ParameterRegistrationImplementor;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+import java.lang.ref.PhantomReference;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 	private final UserJpaRepository userJpaRepository;
+	private final TodoJpaRepository todoJpaRepository;
 
 	public User getUser(HttpSession session) {
 		if (session.getAttribute("user") != null) {
@@ -25,13 +29,12 @@ public class UserService {
 		user.setNo(original.getNo());
 		user.setId(original.getId());
 
-		System.out.println(user.toString());
-
 		return userJpaRepository.save(user);
 	}
 
 	public boolean deleteUser(User user, String password) {
 		if (user.getPassword().equals(password)) {
+			todoJpaRepository.deleteAllByUser(user);
 			userJpaRepository.delete(user);
 
 			return true;
