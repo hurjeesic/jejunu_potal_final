@@ -133,6 +133,9 @@ function valid() {
 		alert('닉네임 중복 검사를 해주세요.');
 	}
 	else {
+		document.getElementById('idTxt').disabled = false;
+		document.getElementById('nicknameTxt').disabled = false;
+
 		return true;
 	}
 
