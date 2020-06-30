@@ -1,4 +1,4 @@
-import { render } from './html-render.js';
+import render from './html-render.js';
 import formInput from './form-input.js';
 
 const $result = document.querySelector('#result');
@@ -24,8 +24,25 @@ $result.addEventListener('click', (event) => {
 		window.location = `${root}/todo/confirm/${no}`;
 	}
 	else if (className === 'toggle-checked') {
-		todoList[index].complete = !todoList[index].complete;
+		event.preventDefault();
+
+		$.ajax({
+			url: `${root}/todo/complete/${no}`,
+			method: 'put',
+			dataType: 'json',
+			success: (data) => {
+				if (data) {
+					todoList[index].complete = data.complete;
+					render(todoList);
+				}
+			},
+			error: (error) => {
+				alert('서버 오류로 완료할 수 없습니다.');
+			}
+		});
 	}
+
+	render(todoList);
 });
 
 formInput.init(todoList, today);

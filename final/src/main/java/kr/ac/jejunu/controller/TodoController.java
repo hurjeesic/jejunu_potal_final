@@ -1,13 +1,10 @@
 package kr.ac.jejunu.controller;
 
 import kr.ac.jejunu.entity.Todo;
-import kr.ac.jejunu.entity.TodoNumber;
 import kr.ac.jejunu.entity.User;
-import kr.ac.jejunu.repository.TodoJpaRepository;
 import kr.ac.jejunu.service.TodoService;
 import kr.ac.jejunu.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.io.IOUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -17,19 +14,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -92,6 +78,12 @@ public class TodoController {
 		modelAndView.addObject("todo", todoService.getTodo(no));
 
 		return modelAndView;
+	}
+
+	@PutMapping("/todo/complete/{no}")
+	@ResponseBody
+	public Todo toggleTodoComplete(HttpSession session, @PathVariable Integer no) {
+		return todoService.updateTodo(session, no);
 	}
 
 	@GetMapping("/todo/download/{no}")

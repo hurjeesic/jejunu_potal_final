@@ -1,4 +1,4 @@
-import { render } from './html-render.js';
+import render from './html-render.js';
 
 const $inputForm = document.querySelector('#input-form');
 const $input = document.querySelector('#input');

@@ -6,9 +6,13 @@ import kr.ac.jejunu.entity.User;
 import kr.ac.jejunu.repository.TodoJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -112,7 +116,7 @@ public class TodoService {
 				todo.setImageName(image.getOriginalFilename());
 				uploadFile(request, no, "image", original.getImageName(), image);
 			}
-			else if (todo.getImageName() != null) {
+			else if (todo.getImageName() == null) {
 				todo.setImageName(original.getImageName());
 			}
 
@@ -120,7 +124,7 @@ public class TodoService {
 				todo.setFileName(file.getOriginalFilename());
 				uploadFile(request, no, "result", original.getFileName(), file);
 			}
-			else if (todo.getFileName() != null) {
+			else if (todo.getFileName() == null) {
 				todo.setFileName(original.getFileName());
 			}
 
@@ -128,6 +132,18 @@ public class TodoService {
 		}
 
 		return result;
+	}
+
+	public Todo updateTodo(HttpSession session, Integer no) {
+		Todo original = todoJpaRepository.findById(no).get();
+
+		if (userService.getUser(session).equals(original.getUser())) {
+			original.setComplete(!original.getComplete());
+
+			return todoJpaRepository.save(original);
+		}
+
+		return null;
 	}
 
 	public Integer deleteTodo(HttpSession session, Integer no) {
